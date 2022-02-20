@@ -11,9 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.0.0-dev.1645142857.f7257f0",
+    "@sapphire/discord.js-utilities": "^4.8.1",
+    "discord.js": "github:monbrey/discord.js#modals",
     "nodemon": "^2.0.15",
-    "twokei-framework": "^0.0.5",
+    "twokei-xframework": "file:../../framework",
     "typescript": "^4.5.5"
   }
 }

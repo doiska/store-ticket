@@ -1,0 +1,46 @@
+{
+    "bot": {
+        "token": "",
+        "prefix": "",
+        "ticketCategoryId": "944741071282405426"
+    },
+    "message": {
+        "title": "Atendimento",
+        "description": "Clique no botão deacordo com o assunto para tratar via ticket.",
+        "footer": ""
+    },
+    "prompters": {
+        "admin": {
+            "title": "Whitelist",
+            "text": "Whitelist",
+            "questions": [
+                {
+                    "type": "SHORT",
+                    "description": "Quando atingir a meta?"
+                },
+                {
+                    "type": "PARAGRAPH",
+                    "description": "Melhor programador do brasil sil sil"
+                },
+                {
+                    "type": "PARAGRAPH",
+                    "description": "Uni duni"
+                }
+            ]
+        },
+        "vip": {
+            "title": "VIP",
+            "text": "vip",
+            "questions": [
+                {
+                    "type": "SHORT",
+                    "description": "Você vai precisar comprovar na próxima etapa."
+                },
+                {
+                    "type": "PARAGRAPH",
+                    "description": "Envie o link do comprovante"
+                }
+            ]
+        }
+    }
+}

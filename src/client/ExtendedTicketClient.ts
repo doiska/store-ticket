@@ -1,14 +1,18 @@
-import { GatewayIntentBits } from 'discord.js';
-import { TwokeiClient } from 'twokei-framework';
+import { TwokeiClient } from 'twokei-xframework';
 import Config from '../config'
+import TicketChannelController from '../controllers/TicketChannelController';
 
 export default class ExtendedTicketClient extends TwokeiClient {
+
+    public config = Config;
+    public ticketController: TicketChannelController;
 
     constructor() {
         super({
             baseDirectoryUrl: Config.root,
-            prefix: '2!',
-            intents: [GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds],
+            prefix: 't!',
+            intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_MESSAGE_REACTIONS', 'GUILD_PRESENCES', 'GUILD_MESSAGES'],
         })
+        this.ticketController = new TicketChannelController(this);
     }
 }

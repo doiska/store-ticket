@@ -38,12 +38,13 @@ export default class ExtendedModal extends Modal {
 
         data = Array.isArray(data) ? data : [data];
 
-        const row = new MessageActionRow<ModalActionRowComponent>({
-            type: 'ACTION_ROW',
-            components: [...data]
-        })
+        super.addComponents(...data.map(each => {
+            return new MessageActionRow<ModalActionRowComponent>({
+                type: 'ACTION_ROW',
+                components: [each]
+            })
+        }));
 
-        super.addComponents(row);
         return this;
     }
 

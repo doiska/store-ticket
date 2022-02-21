@@ -1,46 +1,50 @@
 {
     "bot": {
-        "token": "",
-        "prefix": "",
-        "ticketCategoryId": "944741071282405426"
+        "token": "OTQyMDU1MjM5OTM3MzE4OTUy.Yge7Tw.eKhvqO8XKwU6okCChAC8NV8X1co",
+        "prefix": "T!"
     },
-    "message": {
+    "setupMessage": {
         "title": "Atendimento",
-        "description": "Clique no botão deacordo com o assunto para tratar via ticket.",
-        "footer": ""
+        "description": "Clique no botão de acordo com o **assunto** que deseja tratar via Ticket.",
+        "footer": "TwokeiStore @ 2022"
+    },
+    "channelMessage": {
+        "title": "Ticket | TwokeiStore",
+        "description": "A administração já foi notificada de seu ticket, certifique-se de adicionar outros membros se necessário.",
+        "footer": "Agradecemos seu contato!",
+        "categoryId": "944741071282405426"
     },
     "prompters": {
-        "admin": {
-            "title": "Whitelist",
-            "text": "Whitelist",
-            "questions": [
-                {
-                    "type": "SHORT",
-                    "description": "Quando atingir a meta?"
-                },
-                {
-                    "type": "PARAGRAPH",
-                    "description": "Melhor programador do brasil sil sil"
-                },
-                {
-                    "type": "PARAGRAPH",
-                    "description": "Uni duni"
-                }
-            ]
-        },
-        "vip": {
-            "title": "VIP",
-            "text": "vip",
-            "questions": [
-                {
-                    "type": "SHORT",
-                    "description": "Você vai precisar comprovar na próxima etapa."
-                },
-                {
-                    "type": "PARAGRAPH",
-                    "description": "Envie o link do comprovante"
-                }
-            ]
+        "products": {
+            "button": {
+                "text": "Compras",
+                "color": "PRIMARY",
+                "enabled": true
+            },
+            "modal": {
+                "title": "Produtos",
+                "questions": [
+                    {
+                        "label": "Informe seu nome",
+                        "type": "SHORT",
+                        "required": true
+                    },
+                    {
+                        "label": "Qual produto deseja comprar?",
+                        "type": "SHORT",
+                        "required": true
+                    },
+                    {
+                        "label": "Meio de pagamento",
+                        "type": "SHORT",
+                        "required": true
+                    },
+                    {
+                        "label": "Por onde conheceu a loja?",
+                        "type": "SHORT"
+                    }
+                ]
+            }
         }
     }
 }

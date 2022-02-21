@@ -1,7 +1,9 @@
-import { MessageActionRow } from "discord.js";
+import { MessageActionRow, MessageActionRowComponent } from "discord.js";
 import { MessageButton } from "discord.js";
+import { MessageEmbed } from "discord.js";
 import { GuildMember } from "discord.js";
 import { ICommand, ICommandResponse } from "twokei-xframework";
+import CustomIds from "../helpers/CustomIds";
 import TicketClient from "../TicketClient";
 
 export default class PingCommand implements ICommand {
@@ -27,20 +29,24 @@ export default class PingCommand implements ICommand {
 
         message.delete();
 
-        const rows = [] as MessageActionRow[];
+        const buttons = [] as MessageActionRowComponent[];
         for (const [key, value] of Object.entries(TicketClient.config.prompters)) {
-            rows.push(new MessageActionRow()
-                .addComponents(
-                    new MessageButton()
-                        .setCustomId(`ticket-${key}`)
-                        .setLabel(value.text)
-                        .setStyle('PRIMARY')
-                ))
+            buttons.push(new MessageButton()
+                .setCustomId(CustomIds.OPEN_MODAL + key)
+                .setLabel(value.button.text)
+                .setStyle('PRIMARY'))
         }
 
+        const { title, description, footer } = TicketClient.config.channelMessage;
+
+        const embed = new MessageEmbed()
+            .setTitle(title ?? 'Solicitar atendimento')
+            .setDescription(description ?? 'Selecione uma das opções abaixo e preencha o formulário para abrir o ticket.')
+            .setFooter({ text: footer ?? 'https://twokei.website' })
+
         message.channel.send({
-            content: 'xd',
-            components: rows
+            embeds: [embed],
+            components: [new MessageActionRow().addComponents(buttons)]
         })
     }
 }

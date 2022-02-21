@@ -1,20 +1,10 @@
-import { GuildMember } from "discord.js";
 import { ModalSubmitInteraction } from "discord.js";
 import { Interaction, CacheType } from "discord.js";
 import { DiscordListener } from "twokei-xframework";
+import { handleSubmit } from "../controllers/ChannelCreationHandler";
+import CustomIds from "../helpers/CustomIds";
 import ExtendedModal from "../structures/ExtendedModal";
 import TicketClient from "../TicketClient";
-
-type Prompter = {
-    [key: string]: {
-        title: string,
-        text: string,
-        questions: {
-            type: string,
-            description: string
-        }[]
-    }
-}
 
 export default class ModalPreProcess extends DiscordListener<'interactionCreate'> {
 
@@ -33,70 +23,43 @@ export default class ModalPreProcess extends DiscordListener<'interactionCreate'
         const customId = interaction.customId;
         const config = TicketClient.config;
 
-        console.log(customId);
-        if (!customId?.startsWith('ticket-'))
+        if (!customId?.startsWith(CustomIds.OPEN_MODAL))
             return;
 
-        const prompter = config.prompters as Prompter;
-        const targetName = customId.replace('ticket-', '');
-        const target = prompter?.[targetName]
+        const promptId = customId.replace(CustomIds.OPEN_MODAL, '');
+        const target = config.prompters?.[promptId]
 
         if (!target)
             return;
 
-        const modal = new ExtendedModal(interaction)
-            .prepare('custom-id-modal', 'Tïtulo do modal')
-            .setTitle(target.title)
+        let randomKey = (Math.random() + 1).toString(36).substring(2);
 
-        let i = 0;
-        for (const question of target.questions) {
-            modal.addInput({
-                customId: `${customId}-${targetName}-${i}`,
-                label: `${question.description}`,
-                style: question.type === 'PARAGRAPH' ? 'PARAGRAPH' : 'SHORT',
-                type: 'TEXT_INPUT',
-                required: false
+        const modalId = `modal-id-${randomKey}`
+        const modal = new ExtendedModal(interaction).prepare(modalId, target.modal.title);
+
+        modal.addInput(
+            target.modal.questions.map(({ label, type, required }, index) => {
+                return {
+                    customId: `${customId}-${promptId}-${index}`,
+                    label: `${label}`,
+                    style: type === 'PARAGRAPH' ? 'PARAGRAPH' : 'SHORT',
+                    type: 'TEXT_INPUT',
+                    required: required ?? false
+                };
             })
-            i++;
-        }
-        modal
-            .show({ time: 30000 })
-            .then(async (received) => {
+        )
 
-                if (!received)
-                    return;
+        modal.show({ time: 30000, filter: (filter) => filter.customId === modalId }).then(async (received: ModalSubmitInteraction | undefined) => {
 
-                if (received.components.length < target.questions.length)
-                    return;
+            if (!received)
+                return;
 
-                const userTicketChannel = await TicketClient.ticketController.validateTicketChannel(interaction.member as GuildMember)
-                if (userTicketChannel) {
-                    received.reply({
-                        content: 'Você já possui um ticket em aberto: ' + userTicketChannel.toString(),
-                        ephemeral: true
-                    });
-                    return;
-                }
+            const creationResult = await handleSubmit(received, target);
 
-                const fields = received.components.map((component, index) => {
-                    const questionTitle = target.questions[index]?.description;
-                    return component.components.map(component => ({
-                        title: questionTitle,
-                        answer: component.value === '' ? 'N/A' : component.value
-                    }))?.[0]
-                })
-
-                const result = await TicketClient.ticketController.createTicketChannel((interaction.member as GuildMember), target.title, fields);
-
-                if (!result) {
-                    received.reply('Ocorreu um erro durante a criação de seu Ticket, contate diretamente um administrador.');
-                    return;
-                }
-
-                received.reply({
-                    content: 'Feito! Seu ticket foi criado em ' + result.toString(),
-                    ephemeral: true
-                })
-            }).catch(() => { });
+            received.reply({
+                content: creationResult,
+                ephemeral: true
+            })
+        }).catch(() => { });
     }
 }

@@ -1,7 +1,8 @@
 import TicketClient from "./TicketClient";
 
 const start = async () => {
-    await TicketClient.login('OTQyMDU1MjM5OTM3MzE4OTUy.Yge7Tw.eKhvqO8XKwU6okCChAC8NV8X1co');
+    console.log(TicketClient.config.bot.token)
+    TicketClient.login(TicketClient.config.bot.token).then(console.log).catch(console.error);
 }
 
 start();

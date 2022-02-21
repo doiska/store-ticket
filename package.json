@@ -14,7 +14,7 @@
     "@sapphire/discord.js-utilities": "^4.8.1",
     "discord.js": "github:monbrey/discord.js#modals",
     "nodemon": "^2.0.15",
-    "twokei-xframework": "file:../../framework",
+    "twokei-xframework": "file:../framework",
     "typescript": "^4.5.5"
   }
 }

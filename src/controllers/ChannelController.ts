@@ -1,4 +1,5 @@
 import { TextChannel } from "discord.js";
+import { Util } from "discord.js";
 import { MessageEmbed } from "discord.js";
 import { GuildMember } from "discord.js";
 import ExtendedTicketClient from "../client/ExtendedTicketClient";
@@ -8,17 +9,19 @@ export type Field = {
     answer: string
 }
 
-export default class TicketChannelController {
+export default class ChannelController {
 
+    private client: ExtendedTicketClient
     private categoryId: string;
 
     //TODO: better channel filtering.
 
     constructor(client: ExtendedTicketClient) {
-        this.categoryId = client.config.bot.ticketCategoryId;
+        this.client = client;
+        this.categoryId = client.config.channelMessage.categoryId;
     }
 
-    async createTicketChannel(member: GuildMember, title: string, fields: Field[]) {
+    async createTicketChannel(member: GuildMember, fields: Field[]) {
         const category = await member.guild.channels.fetch(this.categoryId);
 
         if (!category)
@@ -32,24 +35,30 @@ export default class TicketChannelController {
         const channel = await member.guild.channels.create(`${channelName}-${member.user.id}`, {
             type: 'GUILD_TEXT',
             parent: this.categoryId
-        }).catch(console.log);
+        }).catch((e) => {
+            console.log(e);
+            return undefined;
+        });
 
         if (!channel)
             return undefined;
 
-        const mainEmbed = new MessageEmbed().setTitle('Título').setDescription('Configurações do Ticket, adicionar usuário, etc.')
+        const { title, description, footer } = this.client.config.channelMessage;
 
-        const response = new MessageEmbed();
+        const mainEmbed = new MessageEmbed()
+            .setTitle(title ?? 'Configurações do formulário')
+            .setDescription(description ?? '')
+            .setFooter({ text: footer ?? '' })
+
+        await channel.send({ embeds: [mainEmbed] })
 
         for (const field of fields) {
-            response.addField(`Q: ${field.title}`, `A: ${field.answer}`);
+            const response = new MessageEmbed()
+                .setTitle(`${field.title}`)
+                .setDescription(`${field.answer}`);
+
+            await channel.send({ embeds: [response] })
         }
-
-        channel.send({ embeds: [mainEmbed] })
-
-        channel.send({
-            embeds: [response]
-        })
 
         return channel;
     }

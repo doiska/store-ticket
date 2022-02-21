@@ -1,8 +1,8 @@
 import { TextChannel } from "discord.js";
-import { Util } from "discord.js";
 import { MessageEmbed } from "discord.js";
 import { GuildMember } from "discord.js";
 import ExtendedTicketClient from "../client/ExtendedTicketClient";
+import { fastEmbed } from "../helpers/Embed";
 
 export type Field = {
     title: string,
@@ -43,12 +43,18 @@ export default class ChannelController {
         if (!channel)
             return undefined;
 
-        const { title, description, footer } = this.client.config.channelMessage;
+        const { title, description, image_url, footer } = this.client.config.channelMessage;
 
-        const mainEmbed = new MessageEmbed()
-            .setTitle(title ?? 'Configurações do formulário')
-            .setDescription(description ?? '')
-            .setFooter({ text: footer ?? '' })
+        const mainEmbed = fastEmbed({
+            title: title ?? 'Configurações do formulário',
+            description: description ?? '',
+            image: {
+                url: image_url ?? ''
+            },
+            footer: {
+                text: footer ?? ''
+            }
+        })
 
         await channel.send({ embeds: [mainEmbed] })
 

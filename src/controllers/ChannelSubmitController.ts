@@ -1,7 +1,7 @@
 import { GuildMember } from "discord.js";
 import { ModalSubmitInteraction } from "discord.js";
 import { IPrompter } from "../../config";
-import TicketClient from "../TicketClient";
+import TicketClient from "../FormClient";
 
 export async function handleSubmit(interaction: ModalSubmitInteraction, target: IPrompter) {
 

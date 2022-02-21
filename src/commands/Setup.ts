@@ -6,7 +6,7 @@ import { GuildMember } from "discord.js";
 import { ICommand, ICommandResponse } from "twokei-xframework";
 import CustomIds from "../helpers/CustomIds";
 import { fastEmbed } from "../helpers/Embed";
-import TicketClient from "../TicketClient";
+import TicketClient from "../FormClient";
 
 export default class PingCommand implements ICommand {
     name: string = 'setup';

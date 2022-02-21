@@ -1,10 +1,10 @@
 import { ModalSubmitInteraction } from "discord.js";
 import { Interaction, CacheType } from "discord.js";
 import { DiscordListener } from "twokei-xframework";
-import { handleSubmit } from "../controllers/ChannelCreationHandler";
+import { handleSubmit } from "../controllers/ChannelSubmitController";
 import CustomIds from "../helpers/CustomIds";
 import ExtendedModal from "../structures/ExtendedModal";
-import TicketClient from "../TicketClient";
+import TicketClient from "../FormClient";
 
 export default class ModalPreProcess extends DiscordListener<'interactionCreate'> {
 

@@ -1,15 +1,18 @@
 import { TextChannel } from "discord.js";
 import { MessageEmbed } from "discord.js";
+import { MessageButton } from "discord.js";
+import { MessageActionRow } from "discord.js";
 import { GuildMember } from "discord.js";
-import ExtendedTicketClient from "../client/ExtendedTicketClient";
+import ExtendedTicketClient from "../client/ExtendedFormClient";
 import { fastEmbed } from "../helpers/Embed";
+import { ChannelButtons } from "../listeners/ChannelManagement";
 
 export type Field = {
     title: string,
     answer: string
 }
 
-export default class ChannelController {
+export default class ChannelCreationController {
 
     private client: ExtendedTicketClient
     private categoryId: string;
@@ -49,14 +52,18 @@ export default class ChannelController {
             title: title ?? 'Configurações do formulário',
             description: description ?? '',
             image: {
-                url: image_url ?? ''
+                url: image_url
             },
             footer: {
-                text: footer ?? ''
+                text: footer
             }
         })
 
-        await channel.send({ embeds: [mainEmbed] })
+        const mainButtons = Object.entries(ChannelButtons).map(([key, val]) => {
+            return val.button;
+        })
+
+        await channel.send({ embeds: [mainEmbed], components: [new MessageActionRow().addComponents(mainButtons)] })
 
         for (const field of fields) {
             const response = new MessageEmbed()

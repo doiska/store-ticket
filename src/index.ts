@@ -1,4 +1,4 @@
-import TicketClient from "./TicketClient";
+import TicketClient from "./FormClient";
 
 const start = async () => {
     console.log(TicketClient.config.bot.token)

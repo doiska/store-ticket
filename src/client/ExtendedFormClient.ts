@@ -1,7 +1,7 @@
 import { TwokeiClient } from 'twokei-xframework';
 import { IConfig } from '../../config';
 import Config from '../config'
-import ChannelController from '../controllers/ChannelController';
+import ChannelController from '../controllers/ChannelCreationController';
 import { Condition, validateFields } from '../helpers/FieldValidator';
 
 export default class ExtendedTicketClient extends TwokeiClient {

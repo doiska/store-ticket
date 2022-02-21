@@ -3,13 +3,16 @@ import { TextChannel } from "discord.js";
 import { PermissionOverwriteOptions } from "discord.js";
 import { Collection } from "discord.js";
 import { Snowflake } from "discord.js";
+import { MessageEmbed } from "discord.js";
 import { GuildMember } from "discord.js";
 import { MessageButtonStyle } from "discord.js";
 import { Interaction, CacheType } from "discord.js";
 import { DiscordListener } from "twokei-xframework";
+import FormClient from "../FormClient";
+import CustomIds from "../helpers/CustomIds";
 
 const fastButton = (id: string, label: string, style: MessageButtonStyle) => {
-    return new MessageButton().setCustomId(id).setLabel(label).setStyle(style);
+    return new MessageButton().setCustomId(`${CustomIds.EDIT_CHANNEL}${id}`).setLabel(label).setStyle(style);
 }
 
 const setChannelPermission = (channel: TextChannel, members: Collection<Snowflake, GuildMember>, options: PermissionOverwriteOptions) => {
@@ -18,21 +21,32 @@ const setChannelPermission = (channel: TextChannel, members: Collection<Snowflak
     }
 }
 
-const buttons = {
+type Buttons = {
+    [key: string]: {
+        message: string,
+        button: MessageButton;
+        exec: (channel: TextChannel) => void;
+    };
+};
+
+export const ChannelButtons: Buttons = {
     "save": {
-        button: fastButton('ticket-fun-save', '💾 Salvar e arquivar', 'PRIMARY'),
+        message: 'Salvo e arquivado.',
+        button: fastButton('save', '💾 Salvar e arquivar', 'PRIMARY'),
         exec: (channel: TextChannel) => {
             //TODO: criar categoria na config e mover canal para o arquivo juntamente da transcricao
         }
     },
     "lock": {
-        button: fastButton('ticket-fun-lock', '🔒 Trancar', 'SECONDARY'),
+        message: 'Canal trancado.',
+        button: fastButton('lock', '🔒 Trancar', 'SECONDARY'),
         exec: (channel: TextChannel) => {
             setChannelPermission(channel, channel.members, { SEND_MESSAGES: false })
         }
     },
     "unlock": {
-        button: fastButton('ticket-fun-lock', '🔓 Destrancar', 'SUCCESS'),
+        message: 'Canal destrancado.',
+        button: fastButton('unlock', '🔓 Destrancar', 'SUCCESS'),
         exec: (channel: TextChannel) => {
             setChannelPermission(channel, channel.members, { SEND_MESSAGES: true })
         }
@@ -49,14 +63,54 @@ export default class ChannelManagement extends DiscordListener<'interactionCreat
 
     run(interaction: Interaction<CacheType>): void {
 
-        if (!interaction.isButton())
+        if (!interaction.isButton() || !interaction.member || !interaction.channel || interaction.channel.type !== 'GUILD_TEXT')
             return;
 
-        // const customId = interaction.customId;
+        const customId = interaction.customId;
 
-        // if (!customId.startsWith(''))
-        //     return;
+        if (!customId.startsWith(CustomIds.EDIT_CHANNEL))
+            return;
 
-        // throw new Error("Method not implemented.");
+        const member = interaction.member as GuildMember;
+
+        const managmentRoles = FormClient.config.bot.managmentRoles
+
+        //TODO: mudar para FormClient
+        const roles = Array.isArray(managmentRoles) ? managmentRoles : [managmentRoles]
+
+        let found;
+        for (const role of roles) {
+            if (member.roles.cache.has(role)) {
+                found = role;
+                break;
+            }
+        }
+
+        if (!found) {
+            interaction.reply({
+                content: 'Você não possui permissão para alterar as configurações do canal.',
+                ephemeral: true
+            })
+            return;
+        }
+
+        const button = ChannelButtons?.[customId.replace(CustomIds.EDIT_CHANNEL, '')];
+
+        if (!button)
+            return;
+
+        button.exec(interaction.channel as TextChannel);
+        interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                    .setTitle('As propriedades do canal foram alteradas.')
+                    .addField('Responsável', `${member.displayName}`, true)
+                    .addField('Função', `${button.message}`, true)
+                    .setFooter({
+                        text: `https://twokei.store`
+                    })
+                    .setTimestamp()
+            ]
+        })
     }
 }

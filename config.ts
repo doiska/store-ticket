@@ -1,7 +1,8 @@
 export type IConfig = {
     bot: {
         token: string,
-        prefix: string
+        prefix: string,
+        managmentRoles: string | string[]
     },
     setupMessage: {
         color?: string,
@@ -44,7 +45,8 @@ export type IPrompter = {
 const Config: IConfig = {
     "bot": {
         "token": "OTQyMDU1MjM5OTM3MzE4OTUy.Yge7Tw.eKhvqO8XKwU6okCChAC8NV8X1co",
-        "prefix": "T!"
+        "prefix": "T!",
+        "managmentRoles": ['945392862567215155']
     },
     "setupMessage": {
         "title": "Atendimento",

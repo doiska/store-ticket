@@ -1,7 +1,8 @@
 import { TwokeiClient } from 'twokei-xframework';
-import Config, { IConfig } from '../config'
+import { IConfig } from '../../config';
+import Config from '../config'
 import ChannelController from '../controllers/ChannelController';
-import { validateFields } from '../helpers/FieldValidator';
+import { Condition, validateFields } from '../helpers/FieldValidator';
 
 export default class ExtendedTicketClient extends TwokeiClient {
 
@@ -30,25 +31,25 @@ export default class ExtendedTicketClient extends TwokeiClient {
 
         let { title, description, footer } = this.config.channelMessage;
 
-        const _title = {
-            labels: [title],
-            min: 1,
-            max: 256
-        }
-
-        const _description = {
-            labels: [description],
-            min: 1,
-            max: 2048
-        }
-
-        const _footer = {
-            labels: [footer],
-            min: 1,
-            max: 256
-        }
-
-        const invalidFields = validateFields([_title, _description, _footer]);
+        const invalidFields = validateFields(
+            [
+                {
+                    labels: [title],
+                    min: 1,
+                    max: 256
+                },
+                {
+                    labels: [description],
+                    min: 1,
+                    max: 2048
+                },
+                {
+                    labels: [footer ?? ''],
+                    min: 1,
+                    max: 256
+                }
+            ]
+        );
 
         if (invalidFields.length) {
             throw new Error(`Existem campos inválidos na userConfig key: channelMessage | ${invalidFields.join('\n')}`);
@@ -57,30 +58,28 @@ export default class ExtendedTicketClient extends TwokeiClient {
 
     private validatePrompters() {
         console.log('Validating question prompters...');
+
         for (const [key, value] of Object.entries(this.config.prompters)) {
-            const title = {
-                labels: [value.modal.title],
-                min: 1,
-                max: 15
-            };
 
-            const buttonText = {
-                labels: [value.modal.title],
-                min: 1,
-                max: 15
-            }
-
-            const questions = {
-                labels: value.modal.questions.map((question) => question.label),
-                min: 1,
-                max: 45
-            };
-
-            const invalidFields = validateFields([title, buttonText, questions]);
+            const invalidFields = validateFields(
+                [
+                    {
+                        labels: [value.modal.title],
+                        min: 1,
+                        max: 50
+                    },
+                    {
+                        labels: value.modal.questions.map((question) => question.label),
+                        min: 1,
+                        max: 45
+                    }
+                ]
+            );
 
             if (invalidFields.length)
                 throw new Error(`Existem campos inválidos na userConfig key: ${key} | ${invalidFields.join('\n')}`);
         }
+
         console.log('Question prompters successfully validated.');
     }
 }

@@ -49,66 +49,61 @@ const Config: IConfig = {
         "managmentRoles": ['945392862567215155']
     },
     "setupMessage": {
-        "title": "Atendimento",
-        "description": "Clique no botão de acordo com o **assunto** que deseja tratar via Ticket.",
-        "image_url": "https://img.gta5-mods.com/q95/images/fivem-flag-fivem-singleplayer/f8ceb7-20200227125013_1.jpg",
+        "title": "Testar sistema",
+        "description": "Clique no botão de acordo com o **assunto** para ver o formulário",
+        "image_url": "",
         "footer": "TwokeiStore @ 2022"
     },
     "channelMessage": {
         "title": "Ticket | TwokeiStore",
-        "description": "A administração já foi notificada de seu ticket, certifique-se de adicionar outros membros se necessário.",
-        "image_url": "https://img.gta5-mods.com/q95/images/fivem-flag-fivem-singleplayer/f8ceb7-20200227125013_1.jpg",
-        "footer": "Agradecemos seu contato!",
+        "description": "Parabéns! Você criou um novo ticket.\nPor ser uma versão de testes, você consegue Salvar/Trancar/Destrancar, normalmente, essas funções são bloqueadas para os cargos configurados.",
+        "image_url": "",
+        "footer": "Esperamos que goste!",
         "categoryId": "944741071282405426"
     },
     "prompters": {
         "products": {
             "button": {
-                "text": "Compras",
+                "text": "Botão azul",
                 "color": "PRIMARY",
                 "enabled": true
             },
             "modal": {
-                "title": "Produtos",
+                "title": "Titulo do Form",
                 "questions": [
                     {
-                        "label": "Informe seu nome",
+                        "label": "Campo com texto pequeno (obrigatório)",
                         "type": "SHORT",
                         "required": true
                     },
                     {
-                        "label": "Qual produto deseja comprar?",
+                        "label": "Campo com texto pequeno (obrigatório)",
                         "type": "SHORT",
                         "required": true
                     },
                     {
-                        "label": "Meio de pagamento",
-                        "type": "SHORT",
-                        "required": true
-                    },
-                    {
-                        "label": "Por onde conheceu a loja?",
-                        "type": "SHORT"
+                        "label": "Campo com parágrafo (não obrigatório)",
+                        "type": "PARAGRAPH"
                     }
                 ]
             }
         },
         "whitelist": {
             "button": {
-                "text": "Whitelist",
+                "text": "Botão cinza",
                 "color": "SECONDARY",
                 "enabled": true
             },
             "modal": {
-                "title": "Sua whitelist",
+                "title": "Titulo do Form",
                 "questions": [
                     {
-                        "label": "Informe o nome do personagem",
+                        "label": "Texto simples (não obrigatório)",
                         "type": "SHORT",
-                        "required": true
+                        "required": false
                     },
                     {
-                        "label": "Informe a história do seu personagem",
+                        "label": "Texto grande (obrigatório)",
                         "type": "PARAGRAPH",
                         "required": true
                     }

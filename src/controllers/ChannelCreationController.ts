@@ -59,11 +59,10 @@ export default class ChannelCreationController {
             }
         })
 
-        const mainButtons = Object.entries(ChannelButtons).map(([key, val]) => {
-            return val.button;
-        })
+        const mainButtons = Object.entries(ChannelButtons).map(([key, val]) => val.button)
 
-        await channel.send({ embeds: [mainEmbed], components: [new MessageActionRow().addComponents(mainButtons)] })
+        const message = await channel.send({ embeds: [mainEmbed], components: [new MessageActionRow().addComponents(mainButtons)] })
+        message.pin();
 
         for (const field of fields) {
             const response = new MessageEmbed()

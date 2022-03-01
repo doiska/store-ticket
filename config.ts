@@ -46,7 +46,7 @@ const Config: IConfig = {
     "bot": {
         "token": "OTQyMDU1MjM5OTM3MzE4OTUy.Yge7Tw.eKhvqO8XKwU6okCChAC8NV8X1co",
         "prefix": "T!",
-        "managmentRoles": ['945392862567215155']
+        "managmentRoles": 'DEV'
     },
     "setupMessage": {
         "title": "Testar sistema",
@@ -56,7 +56,7 @@ const Config: IConfig = {
     },
     "channelMessage": {
         "title": "Ticket | TwokeiStore",
-        "description": "Parabéns! Você criou um novo ticket.\nPor ser uma versão de testes, você consegue Salvar/Trancar/Destrancar, normalmente, essas funções são bloqueadas para os cargos configurados.",
+        "description": "Parabéns! Você criou um novo ticket.\nPor ser uma versão de testes, você consegue Salvar/Trancar/Destrancar, normalmente, essas funções são bloqueadas para os cargos configurados.\n**Quer este sistema em seu servidor? Entre em contato <#canal> e adquira já!**",
         "image_url": "",
         "footer": "Esperamos que goste!",
         "categoryId": "944741071282405426"

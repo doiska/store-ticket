@@ -1,6 +1,7 @@
 import { TextChannel } from "discord.js";
 import { MessageEmbed } from "discord.js";
 import { MessageButton } from "discord.js";
+import { OverwriteResolvable } from "discord.js";
 import { MessageActionRow } from "discord.js";
 import { GuildMember } from "discord.js";
 import ExtendedTicketClient from "../client/ExtendedFormClient";
@@ -37,7 +38,17 @@ export default class ChannelCreationController {
 
         const channel = await member.guild.channels.create(`${channelName}-${member.user.id}`, {
             type: 'GUILD_TEXT',
-            parent: this.categoryId
+            parent: this.categoryId,
+            permissionOverwrites: [
+                {
+                    id: member.guild.id,
+                    deny: ['VIEW_CHANNEL']
+                },
+                {
+                    id: member.id,
+                    allow: ['SEND_MESSAGES', 'VIEW_CHANNEL']
+                },
+            ]
         }).catch((e) => {
             console.log(e);
             return undefined;
@@ -71,7 +82,6 @@ export default class ChannelCreationController {
 
             await channel.send({ embeds: [response] })
         }
-
         return channel;
     }
 

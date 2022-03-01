@@ -75,13 +75,13 @@ export default class ChannelManagement extends DiscordListener<'interactionCreat
 
         const managmentRoles = FormClient.config.bot.managmentRoles
 
-        //TODO: mudar para FormClient
-        const roles = Array.isArray(managmentRoles) ? managmentRoles : [managmentRoles]
+        const roles = (Array.isArray(managmentRoles) ? managmentRoles : [managmentRoles]) ?? [];
 
-        let found;
+        let found = managmentRoles === 'DEV';
+
         for (const role of roles) {
             if (member.roles.cache.has(role)) {
-                found = role;
+                found = true;
                 break;
             }
         }
